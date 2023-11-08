@@ -11,6 +11,6 @@ class ProductOfInterest extends Model
 
     protected $fillable = [
         'business_id',
-        'product_name'
+        'product_id'
     ];
 }

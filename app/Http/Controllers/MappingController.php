@@ -12,7 +12,10 @@ class MappingController extends Controller
     {
         $mappings = Mapping::where('user_id', auth()->user()->id)->get();
 
-        return response()->json(['data' => $mappings], 200);
+        return response()->json([
+            "message" => "Mappings retrieved successfully",
+            'data' => $mappings
+        ], 200);
     }
 
     public function store(Request $request)
@@ -57,7 +60,7 @@ class MappingController extends Controller
                 $product = new ProductOfInterest();
 
                 $product->business_id = $mapping->id;
-                $product->product_name = $product_of_interest['product_name'];
+                $product->product_id = $product_of_interest['product_id'];
                 $product->save();
             }
         }
@@ -80,7 +83,10 @@ class MappingController extends Controller
 
         }
         //show the message of success and the data
-        return response()->json(['message' => 'Mapping created successfully', 'data' => $mapping], 201);
+        return response()->json([
+            'message' => 'Mapping created successfully',
+            'data' => $mapping
+        ], 201);
 
     }
 }

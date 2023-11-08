@@ -10,7 +10,11 @@ class RoutePlanController extends Controller
     {
         $routePlans = RoutePlan::where('user_id', auth()->user()->id)->get();
 
-        return response()->json(['route_plans' => $routePlans], 200);
+        return response()->json(
+            [
+                'message' => 'Route plans retrieved successfully',
+                'data' => $routePlans
+            ], 200);
     }
 
     public function store(Request $request)
