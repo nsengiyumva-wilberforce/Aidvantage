@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordEmail;
 use App\Mail\VerifyEmail;
+use App\Models\Mapping;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Http\Request;
@@ -286,4 +287,26 @@ class LoginController extends Controller
                     'user' => $user,
                 ], 200);
             }
+
+            public function deleteUserAccount()
+            {
+                $userId = auth()->user()->id;
+
+                // Delete related records in the mappings table
+                Mapping::where('user_id', $userId)->delete();
+
+                // Now, delete the user
+                $user = User::find($userId);
+
+                if (!$user->delete()) {
+                    return response()->json([
+                        'message' => 'Failed to delete user account',
+                    ], 500);
+                }
+
+                return response()->json([
+                    'message' => 'User account deleted successfully',
+                ], 200);
+            }
+
 }
