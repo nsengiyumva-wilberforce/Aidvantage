@@ -275,4 +275,15 @@ class LoginController extends Controller
                     'message' => 'Code verified successfully',
                 ], 200);
             }
+
+            public function profile(Request $request)
+            {
+                //get the logged in user profile
+                $user = User::where('id', auth()->user()->id)->first();
+                //return the user profile
+                return response()->json([
+                    'message' => 'User profile retrieved successfully',
+                    'user' => $user,
+                ], 200);
+            }
 }
