@@ -25,8 +25,18 @@ use App\Http\Controllers\SaleController;
 /*
  *login and logout routes
  */
-Route::post('/login', [LoginController::class, 'authenticate']);
-Route::post('/logout', [LoginController::class, 'logout']);
+//routes for authentication
+Route::controller(LoginController::class)->group(function () {
+    Route::post('login', 'authenticate');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+});
+
+Route::post('profile/verify-email', [LoginController::class, 'verifyEmail']);
+Route::post('profile/verify-password-reset-email', [LoginController::class, 'verifyPasswordResetEmail']);
+Route::post('profile/resend-verification-code', [LoginController::class, 'resendVerificationCode']);
+Route::post('profile/reset-password-code', [LoginController::class, 'resetPasswordCode']);
+Route::post('profile/reset-password', [LoginController::class, 'resetPassword']);
 
 /*
  *Wrap with sanctum middleware to protect the routes

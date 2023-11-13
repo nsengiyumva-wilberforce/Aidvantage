@@ -5,12 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sale extends Model
+class VerificationCode extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'visit_id'
-    ];
 }
