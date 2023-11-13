@@ -11,7 +11,10 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return response()->json(['data' => $products], 200);
+        return response()->json([
+            'message'=> 'products retrieved successfully',
+            'data' => $products
+        ], 200);
     }
 
     public function store(Request $request)
@@ -25,7 +28,7 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['error' => 'Something went wrong'], 500);
         }
-        
+
         return response()->json(['data' => $product, 'message' => 'Product created successfully'], 201);
     }
 }
