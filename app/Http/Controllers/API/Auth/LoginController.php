@@ -84,11 +84,18 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request){
-        auth()->user()->tokens()->delete();
+        $logout = $request->user()->currentAccessToken()->delete();
+        if(!$logout){
+            return response()->json([
+                'message' => 'Logout failed',
+                'status' => 'error'
+            ], 500);
+        }
 
         return response()->json([
-            'message' => 'Logged out'
-        ]);
+            'message' => 'Logged out',
+            'status' => 'success'
+        ], 200);
     }
 
         //verify email using the code

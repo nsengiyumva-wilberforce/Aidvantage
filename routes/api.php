@@ -29,7 +29,6 @@ use App\Http\Controllers\SaleController;
 Route::controller(LoginController::class)->group(function () {
     Route::post('login', 'authenticate');
     Route::post('register', 'register');
-    Route::post('logout', 'logout');
 });
 
 Route::post('profile/verify-email', [LoginController::class, 'verifyEmail']);
@@ -42,6 +41,9 @@ Route::post('profile/reset-password', [LoginController::class, 'resetPassword'])
  *Wrap with sanctum middleware to protect the routes
  */
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('logout', [LoginController::class, 'logout']);
+
     Route::get('/mappings', [MappingController::class, 'index']);
     Route::post('/mappings', [MappingController::class, 'store']);
 
