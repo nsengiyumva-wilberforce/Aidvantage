@@ -11,6 +11,6 @@ class Appointment extends Model
 
     public function visit()
     {
-        return $this->morphOne('App\Models\Visit', 'visitable', 'visit_purpose_type', 'visit_purpose_id');
+        return $this->belongsTo('App\Models\Visit', 'visit_id');
     }
 }

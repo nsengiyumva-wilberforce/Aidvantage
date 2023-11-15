@@ -4,15 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Demo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DemoController extends Controller
 {
     public function index()
     {
-        // Get all the demos for the authenticated user
-        $demos = Demo::where('user_id', auth()->user()->id)->get();
+         // Get the logged-in user
+    $user = Auth::user();
 
-        // Return a collection of demos
-        return response()->json(['data' => $demos], 200);
+    // Retrieve maintenances with user, visit, and business information
+    $demos = $user->demos()
+        ->with(['visit' => function ($query) {
+            $query->select('id', 'business_id'); // Assuming 'business_id' is the foreign key in the 'visits' table
+        }])
+        ->with(['visit.visit' => function ($query) {
+            $query->select('id', 'business_name'); // Assuming 'business_name' is the column in the 'mappings' table
+        }])
+        ->get();
+
+        return response()->json(
+            [
+                'message' => 'successfully fetched all demos',
+                'data' => $demos
+
+                ]
+            , 200);
     }
 }

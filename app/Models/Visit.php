@@ -26,4 +26,9 @@ class Visit extends Model
         return $this->hasOne('App\Models\Demo', 'visit_id');
     }
 
+    public function visit()
+    {
+        return $this->belongsTo(Mapping::class, 'business_id');
+    }
+
 }

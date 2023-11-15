@@ -14,4 +14,14 @@ class MaintenanceProduct extends Model
         'product_id',
         'quantity',
     ];
+
+    public function maintenance()
+    {
+        return $this->belongsTo(Maintenance::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

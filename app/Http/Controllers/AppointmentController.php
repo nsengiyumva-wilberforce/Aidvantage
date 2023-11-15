@@ -2,14 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::where('user_id', auth()->user()->id)->get();
+         // Get the logged-in user
+    $user = Auth::user();
 
-        return response()->json(['data' => $appointments], 200);
+    // Retrieve maintenances with user, visit, and business information
+    $appointments = $user->appointments()
+        ->with(['visit' => function ($query) {
+            $query->select('id', 'business_id'); // Assuming 'business_id' is the foreign key in the 'visits' table
+        }])
+        ->with(['visit.visit' => function ($query) {
+            $query->select('id', 'business_name'); // Assuming 'business_name' is the column in the 'mappings' table
+        }])
+        ->get();
+
+        return response()->json(
+            [
+                'message' => 'successfully fetched all maintenances',
+                'data' => $appointments
+                ]
+            , 200);
     }
 }

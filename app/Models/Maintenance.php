@@ -13,4 +13,12 @@ class Maintenance extends Model
     {
         return $this->belongsTo('App\Models\Visit', 'visit_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function maintenanceProducts()
+    {
+        return $this->hasMany(MaintenanceProduct::class);
+    }
 }
