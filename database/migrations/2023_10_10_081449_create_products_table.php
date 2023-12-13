@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('category');
             $table->text('description');
             $table->string('unit')->nullable();
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }
