@@ -112,9 +112,7 @@ class VisitController extends Controller
 
             if ($sale->save()) {
                 $visit_purpose_flag = 1;
-                //save the sale product
                 $sale_products = $request->input('sale_products');
-
                 foreach ($sale_products as $sale_product) {
                     $product = new SaleProduct();
                     $product->sale_id = $sale->id;

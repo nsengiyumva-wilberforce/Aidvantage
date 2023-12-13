@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('product_name');
             $table->bigInteger('price');
             $table->integer('quantity');
+            $table->string('category');
+            $table->text('description');
+            $table->string('unit')->nullable();
+            $table->string('type');
             $table->timestamps();
         });
     }

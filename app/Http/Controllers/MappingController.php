@@ -89,4 +89,31 @@ class MappingController extends Controller
         ], 201);
 
     }
+
+    public function contacts()
+    {
+        $mappings = Mapping::where('user_id', auth()->user()->id)->get();
+
+        // You can loop through each Mapping instance to access tel_no and email
+        foreach ($mappings as $mapping) {
+            $businessId = $mapping->id;
+            $businessName = $mapping->business_name;
+            $telNo = $mapping->business_telephone_contact;
+            $email = $mapping->business_email_contact;
+
+            $contactInfo[] = [
+                'business_id' => $businessId,
+                'business_name' => $businessName,
+                'business_telephone_contact' => $telNo,
+                'business_email_contact' => $email,
+            ];
+        }
+
+        // You can return the contact information as needed
+        return response()->json([
+            'message' => 'Contact information retrieved successfully',
+            'contacts' => $contactInfo
+        ], 200);
+    }
+
 }

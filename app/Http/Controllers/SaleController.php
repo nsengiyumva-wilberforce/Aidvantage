@@ -29,7 +29,7 @@ class SaleController extends Controller
 
         return response()->json(
             [
-                'message' => 'successfully fetched all maintenances',
+                'message' => 'successfully fetched all sales',
                 'data' => $sales
                 ]
             , 200);

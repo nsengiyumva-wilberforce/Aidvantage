@@ -11,20 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoutePlanController;
 use App\Http\Controllers\SaleController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
-/*
- *login and logout routes
- */
 //routes for authentication
 Route::controller(LoginController::class)->group(function () {
     Route::post('login', 'authenticate');
@@ -37,9 +24,6 @@ Route::post('profile/resend-verification-code', [LoginController::class, 'resend
 Route::post('profile/reset-password-code', [LoginController::class, 'resetPasswordCode']);
 Route::post('profile/reset-password', [LoginController::class, 'resetPassword']);
 
-/*
- *Wrap with sanctum middleware to protect the routes
- */
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('logout', [LoginController::class, 'logout']);
@@ -51,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mappings', [MappingController::class, 'index']);
     Route::post('/mappings', [MappingController::class, 'store']);
 
+    Route::get('/contacts', [MappingController::class, 'contacts']);
+
     Route::get('/route-plans', [RoutePlanController::class, 'index']);
     Route::post('/route-plans', [RoutePlanController::class, 'store']);
 
@@ -58,7 +44,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sales', [SaleController::class, 'store']);
 
     Route::get('/products', [ProductController::class, 'index']);
-
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::get('/get-coffee-machines', [ProductController::class, 'getCoffeeMachines']);
+    Route::get('/get-coffee-products', [ProductController::class, 'getCoffeeProducts']);
+    Route::put('/products/{product}', [ProductController::class, 'update']);
+    Route::delete('/products/{product}', [ProductController::class, 'delete']);
+    Route::put('/update-quantity/{product}', [ProductController::class, 'updateQuantity']);
+    
     Route::get('/visits', [VisitController::class, 'index']);
     Route::post('/visits', [VisitController::class, 'store']);
 
