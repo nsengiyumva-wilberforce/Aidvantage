@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/demos', [DemoController::class, 'index']);
 
+    Route::post('/add-target-metrics', [TargetMetricController::class, 'store']);
     Route::get('/target-metrics', [TargetMetricController::class, 'index']);
 
     Route::get('/targets', [TargetController::class, 'showAllTargets']);

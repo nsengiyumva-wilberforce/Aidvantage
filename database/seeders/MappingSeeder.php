@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Target;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Mapping;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TargetSeeder extends Seeder
+class MappingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Create 10 targets
-        Target::factory()->count(10)->create();
+        Mapping::factory()->count(10)->create();
     }
 }

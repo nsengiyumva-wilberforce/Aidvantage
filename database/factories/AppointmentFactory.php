@@ -2,19 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Target;
+use App\Models\Appointment;
 use App\Models\User;
-use App\Models\TargetMetric;
+use App\Models\Visit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TargetFactory extends Factory
+class AppointmentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Target::class;
+    protected $model = Appointment::class;
 
     /**
      * Define the model's default state.
@@ -24,8 +24,12 @@ class TargetFactory extends Factory
     public function definition()
     {
         return [
+            'meeting_date' => $this->faker->date(),
+            'meeting_start_time' => $this->faker->time('H:i'),
+            'meeting_end_time' => $this->faker->time('H:i'),
+            'meeting_notes' => $this->faker->paragraph,
             'user_id' => User::factory(),
-            'target_metrics_id' => TargetMetric::factory(),
+            'visit_id' => Visit::factory(),
         ];
     }
 }

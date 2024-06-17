@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('target_value');
-            $table->unsignedBigInteger('actual_value')->default(0);
             $table->String('deadline');
             $table->timestamps();
         });

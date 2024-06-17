@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Delivery;
+use App\Models\Demo;
+use App\Models\Maintenance;
+use App\Models\Mapping;
+use App\Models\Sale;
 use App\Models\Target;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\TargetMetric;
+use Illuminate\Support\Facades\DB;
 
 class TargetController extends Controller
 {
@@ -47,20 +53,26 @@ class TargetController extends Controller
                         'data' => [],
                     ],
                     200
-                );}
+                );
+            }
         }
 
         // Get all targets with their users and metrics filtered by the specified metric name
-        $targets = Target::with(['users', 'targetMetrics' => function ($query) use ($request) {
-            $query->where('name', $request->metric_name);
-        }])->get();
+        $targets = Target::with([
+            'users',
+            'targetMetrics' => function ($query) use ($request) {
+                $query->where('name', $request->metric_name);
+            }
+        ])->get();
 
         // Transform the data for simplification
         $transformedTargets = $targets->map(function ($target) {
             // Check if targetMetrics is not null
             if ($target->targetMetrics) {
+                //actual value is calculated based on the metric name and user id
+                $actual_value = $this->calculateActualValue($target->targetMetrics->name, $target->user_id);
                 // Calculate the percentage of target covered
-                $percentageCovered = (($target->targetMetrics->actual_value) / ($target->targetMetrics->target_value)) * 100;
+                $percentageCovered = ($actual_value / ($target->targetMetrics->target_value)) * 100;
 
                 // Calculate the days remaining/hours to the deadline
                 $now = Carbon::now();
@@ -73,6 +85,8 @@ class TargetController extends Controller
                     'user_email' => $target->users->email,
                     'target_metric_name' => $target->targetMetrics->name,
                     'percentage_covered' => round($percentageCovered),
+                    'actual_value' => $actual_value,
+                    'target_value' => $target->targetMetrics->target_value,
                     'time_remaining' => $timeRemaining,
                 ];
             } else {
@@ -93,6 +107,32 @@ class TargetController extends Controller
         );
     }
 
+    public function calculateActualValue($metric_name, $user_id)
+    {
+        /**check the target metric, if its product, then get actual value from the count of sales made by the user,
+         * if its mapping, get the actual value from the count of mappings made by the user
+         * if maintenance, get the actual value from the count of maintenance made by the user
+         * if delivery, get the actual value from the count of deliveries made by the user
+         * if demo, get the actual value from the count of demos made by the user
+         */
+        $actual_value = 0;
+        if ($metric_name == 'product') {
+            $actual_value = DB::table('sales')
+                ->join('sale_products', 'sales.id', '=', 'sale_products.sale_id')
+                ->where('sales.user_id', $user_id)
+                ->sum('sale_products.quantity');
+        } elseif ($metric_name == 'mapping') {
+            $actual_value = Mapping::where('user_id', $user_id)->count();
+        } elseif ($metric_name == 'maintenance') {
+            $actual_value = Maintenance::where('user_id', $user_id)->count();
+        } elseif ($metric_name == 'delivery') {
+            $actual_value = Delivery::where('user_id', $user_id)->count();
+        } elseif ($metric_name == 'demo') {
+            $actual_value = Demo::where('user_id', $user_id)->count();
+        }
+
+        return $actual_value;
+    }
 
     public function getUsersWithTarget(Request $request)
     {
@@ -107,7 +147,8 @@ class TargetController extends Controller
                         'data' => [],
                     ],
                     200
-                );}
+                );
+            }
         }
 
         // Get the id of the metric
@@ -115,9 +156,11 @@ class TargetController extends Controller
 
         // Get users with targets for the specified metric
         $users = User::where('id', '!=', auth()->user()->id)
-            ->with(['targets' => function ($query) use ($metric_id) {
-                $query->where('target_metrics_id', $metric_id);
-            }])
+            ->with([
+                'targets' => function ($query) use ($metric_id) {
+                    $query->where('target_metrics_id', $metric_id);
+                }
+            ])
             ->get()
             ->map(function ($user) {
                 $user->assigned_target = $user->targets->isNotEmpty();
@@ -127,8 +170,10 @@ class TargetController extends Controller
         return response()->json(
             [
                 'message' => 'Users retrieved successfully',
-            'data' => $users
-        ], 200);
+                'data' => $users
+            ],
+            200
+        );
     }
 
     public function assignTargets(Request $request)
@@ -144,7 +189,8 @@ class TargetController extends Controller
                         'data' => [],
                     ],
                     200
-                );}
+                );
+            }
         }
         // Get the id of the metric
         $metric_id = TargetMetric::where('name', $request->metric_name)->value('id');
@@ -161,7 +207,9 @@ class TargetController extends Controller
 
         return response()->json(
             [
-            'message' => 'Targets assigned successfully'
-        ], 200);
+                'message' => 'Targets assigned successfully'
+            ],
+            200
+        );
     }
 }

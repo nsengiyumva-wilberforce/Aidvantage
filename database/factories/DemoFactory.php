@@ -2,19 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Target;
+use App\Models\Demo;
 use App\Models\User;
-use App\Models\TargetMetric;
+use App\Models\Visit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TargetFactory extends Factory
+class DemoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Target::class;
+    protected $model = Demo::class;
 
     /**
      * Define the model's default state.
@@ -24,8 +24,10 @@ class TargetFactory extends Factory
     public function definition()
     {
         return [
+            'demo_date' => $this->faker->date(),
+            'demo_notes' => $this->faker->paragraph,
             'user_id' => User::factory(),
-            'target_metrics_id' => TargetMetric::factory(),
+            'visit_id' => Visit::factory(),
         ];
     }
 }

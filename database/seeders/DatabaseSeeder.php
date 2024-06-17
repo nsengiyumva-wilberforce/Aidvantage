@@ -23,8 +23,21 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            MappingSeeder::class,
+            VisitSeeder::class,
+            ProductSeeder::class,
+            TargetMetricSeeder::class,
+            SaleSeeder::class,
+            AppointmentSeeder::class,
+            DeliverySeeder::class,
+            DeliveryProductSeeder::class,
+            DemoSeeder::class,
+            MaintenanceSeeder::class,
             TargetSeeder::class,
-            // ProductSeed::class,
+            ItemOfInterestSeeder::class,
+            MaintenanceSeeder::class,
+            ProductOfInterestSeeder::class,
+            SaleProductSeeder::class,
         ]);
     }
 }

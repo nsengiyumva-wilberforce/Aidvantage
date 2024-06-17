@@ -33,7 +33,19 @@ class TargetMetricController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $targetMetric = TargetMetric::create($request->all());
+
+            return response()->json([
+                'message' => 'Successfully created target metric',
+                'data' => $targetMetric
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to create target metric',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

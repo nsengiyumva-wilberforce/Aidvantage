@@ -2,15 +2,17 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Demo;
 
-class TargetWithMetricsSeeder extends Seeder
+class DemoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-       \App\Models\Target::factory(10)->create();
+        Demo::factory()->count(10)->create();
     }
 }

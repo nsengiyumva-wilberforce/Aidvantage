@@ -2,19 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Target;
-use App\Models\User;
-use App\Models\TargetMetric;
+use App\Models\SaleProduct;
+use App\Models\Sale;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TargetFactory extends Factory
+class SaleProductFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Target::class;
+    protected $model = SaleProduct::class;
 
     /**
      * Define the model's default state.
@@ -24,8 +24,9 @@ class TargetFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'target_metrics_id' => TargetMetric::factory(),
+            'sale_id' => Sale::factory(),
+            'product_id' => Product::factory(),
+            'quantity' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
