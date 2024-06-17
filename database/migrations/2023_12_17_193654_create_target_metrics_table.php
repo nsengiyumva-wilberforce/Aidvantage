@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('targets', function (Blueprint $table) {
+        Schema::create('target_metrics', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('target_number_of_visits');
-            $table->string('target_start_date');
-            $table->string('target_end_date');
+            $table->string('name');
+            $table->unsignedBigInteger('target_value');
+            $table->unsignedBigInteger('actual_value')->default(0);
+            $table->String('deadline');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('targets');
+        Schema::dropIfExists('target_metrics');
     }
 };

@@ -72,4 +72,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Delivery::class);
     }
+
+    //a user can have many targets
+    public function targets()
+    {
+        return $this->hasMany(Target::class);
+    }
+
+    //user can have 
 }

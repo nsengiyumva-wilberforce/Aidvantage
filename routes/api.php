@@ -10,9 +10,9 @@ use App\Http\Controllers\MappingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoutePlanController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\TargetMetricController;
+use App\Http\Controllers\TargetController;
 
-
-//routes for authentication
 Route::controller(LoginController::class)->group(function () {
     Route::post('login', 'authenticate');
     Route::post('register', 'register');
@@ -28,9 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('logout', [LoginController::class, 'logout']);
 
-    Route::get('profile',[LoginController::class, 'profile']);
+    Route::get('profile', [LoginController::class, 'profile']);
 
-    Route::delete('delete-profile',[LoginController::class, 'deleteUserAccount']);
+    Route::delete('delete-profile', [LoginController::class, 'deleteUserAccount']);
 
     Route::get('/mappings', [MappingController::class, 'index']);
     Route::post('/mappings', [MappingController::class, 'store']);
@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'delete']);
     Route::put('/update-quantity/{product}', [ProductController::class, 'updateQuantity']);
-    
+
     Route::get('/visits', [VisitController::class, 'index']);
     Route::post('/visits', [VisitController::class, 'store']);
 
@@ -61,4 +61,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/maintenances', [MaintenanceController::class, 'index']);
 
     Route::get('/demos', [DemoController::class, 'index']);
+
+    Route::get('/target-metrics', [TargetMetricController::class, 'index']);
+
+    Route::get('/targets', [TargetController::class, 'showAllTargets']);
+
+    Route::get('/user-with-targets', [TargetController::class, 'getUsersWithTarget']);
+
+    Route::post('/assign-targets', [TargetController::class, 'assignTargets']);
 });
